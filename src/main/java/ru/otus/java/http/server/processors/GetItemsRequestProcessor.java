@@ -18,8 +18,17 @@ public class GetItemsRequestProcessor implements RequestProcessor {
     @Override
     public void execute(HttpRequest request, OutputStream output) throws IOException {
         Gson gson = new Gson();
-        List<Item> items = itemRepository.getAllItems();
-        String json = gson.toJson(items);
+        String json;
+        String param = request.getParameter("id");
+        if (param == null) {
+            List<Item> items = itemRepository.getAllItems();
+            json = gson.toJson(items);
+        }
+        else {
+            Long itemId = Long.parseLong(param);
+            Item item = itemRepository.getItemById(itemId);
+            json = gson.toJson(item);
+        }
         String response =
                 "HTTP/1.1 200 OK\r\n" +
                         "Content-Type: application/json\r\n" +
