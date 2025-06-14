@@ -1,5 +1,6 @@
 package ru.otus.java.http.server;
 
+import org.apache.logging.log4j.Logger;
 import ru.otus.java.http.server.app.ItemRepository;
 import ru.otus.java.http.server.exceptions_handling.BadRequestException;
 import ru.otus.java.http.server.processors.*;
@@ -17,7 +18,7 @@ public class Dispatcher {
     Map<String, RequestProcessor> routes;
     private RequestProcessor defaultNotFoundProcessor;
     private RequestProcessor defaultStaticResourcesProcessor;
-
+    private Logger logger;
     public Dispatcher() {
         ItemRepository itemRepository = new ItemRepository();
         this.routes = new HashMap<>();
@@ -28,8 +29,14 @@ public class Dispatcher {
         this.defaultNotFoundProcessor = new DefaultNotFoundRequestProcessor();
         this.defaultStaticResourcesProcessor = new DefaultStaticResourcesProcessor();
     }
-    public void execute(HttpRequest request, OutputStream output) throws IOException {
 
+    public Dispatcher(Logger logger) {
+        this();
+        this.logger = logger;
+
+    }
+
+    public void execute(HttpRequest request, OutputStream output) throws IOException {
         Path staticPath = Paths.get("./static", request.getUri().substring(1));
         if (Files.exists(staticPath) && Files.isRegularFile(staticPath)) {
             defaultStaticResourcesProcessor.execute(request, output);
@@ -41,6 +48,7 @@ public class Dispatcher {
         }
         try {
             routes.get(request.getRoutingKey()).execute(request, output);
+            logger.info("Выполнен запрос " + request.getRoutingKey());
         }
         catch (BadRequestException e) {
             String response = "HTTP/1.1 400 Bad Request\r\n" +
@@ -48,6 +56,7 @@ public class Dispatcher {
                     "\r\n" +
             "<html><body><ch1>Bad Request</hl><p>" + e.getCode() + ": " + e.getDescription() + "</p</body></htmL>";
             output.write(response.getBytes(StandardCharsets.UTF_8));
+            logger.info("HTTP/1.1 400 Bad Request");
         }
         catch (Exception e) {
             String response = "HTTP/1.1 500 Internal Server Error\r\n" +
@@ -55,6 +64,7 @@ public class Dispatcher {
                     "\r\n" +
                     "<html><body><ch1><h1>500 Internal Server Error</h1><h2>Ой......Кажется что-то сломалось</h2></body></htmL>";
             output.write(response.getBytes(StandardCharsets.UTF_8));
+            logger.info("500 Internal Server Error");
         }
     }
 }
