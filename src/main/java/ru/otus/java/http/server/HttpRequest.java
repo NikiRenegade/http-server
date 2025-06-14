@@ -29,6 +29,9 @@ public class HttpRequest {
     public String getRoutingKey() {
         return method + " " + uri;
     }
+    public boolean containsParameter(String key) {
+        return parameters.containsKey(key);
+    }
 
     public void info(boolean showRawRequest){
         if(showRawRequest){

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class Item {
     private Long id;
-    private String tittle;
+    private String title;
     private BigDecimal price;
     public Long getId() {
         return id;
@@ -12,11 +12,11 @@ public class Item {
     public void setId(Long id) {
         this.id = id;
     }
-    public String getTittle() {
-        return tittle;
+    public String getTitle() {
+        return title;
     }
-    public void setTittle(String tittle) {
-        this.tittle = tittle;
+    public void setTitle(String title) {
+        this.title = title;
     }
     public BigDecimal getPrice() {
         return price;
@@ -26,7 +26,7 @@ public class Item {
     }
     public Item(Long id, String tittle, BigDecimal price) {
         this.id = id;
-        this.tittle = tittle;
+        this.title = tittle;
         this.price = price;
     }
 

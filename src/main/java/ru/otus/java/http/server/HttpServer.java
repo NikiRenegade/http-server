@@ -16,7 +16,7 @@ public class HttpServer {
     public void start() {
         try (ServerSocket serverSocket = new ServerSocket(port)){
             System.out.println("Server started");
-            while (true){
+            while (true) {
                 try (Socket socket = serverSocket.accept()) {
                     byte[] buffer = new byte[8192];
                     int n = socket.getInputStream().read(buffer);

@@ -1,16 +1,18 @@
 package ru.otus.java.http.server.processors;
 
 import ru.otus.java.http.server.HttpRequest;
+import ru.otus.java.http.server.exceptions_handling.BadRequestException;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 public class CalcRequestProcessor implements RequestProcessor {
-
-
     @Override
     public void execute(HttpRequest request, OutputStream output) throws IOException {
+        if(!request.containsParameter("a")) {
+            throw new BadRequestException("REQUEST_VALIDATION_ERROR", "Обязательный параметр 'a' отсутствует");
+        }
         int a = Integer.parseInt(request.getParameter("a"));
         int b = Integer.parseInt(request.getParameter("b"));
         String result = a + " + " + b + " = " + (a +  b);
