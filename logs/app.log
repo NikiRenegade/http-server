@@ -4,3 +4,4 @@
 2025-06-14 18:58:26 INFO  HttpServer:18 - Server started
 2025-06-14 18:58:44 INFO  HttpServer:51 - Выполнен запросGET /items
 2025-06-14 18:59:10 INFO  HttpServer:51 - Выполнен запросGET /items
+2025-06-14 20:47:49 INFO  HttpServer:18 - Server started
